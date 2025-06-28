@@ -18,7 +18,7 @@ const Profile = () => {
 
     const fetchUser = async () => {
       try {
-        const userRef = doc(db, 'users', phone);
+        const userRef = doc(db, 'persons', phone);
         const docSnap = await getDoc(userRef);
 
         if (docSnap.exists()) {
