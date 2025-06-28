@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { auth,db } from '../firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { auth, db } from '../firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -8,8 +8,22 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [location, setLocation] = useState('');
   const navigate = useNavigate();
+  const uid = auth.currentUser?.uid;
 
-  // const phone = localStorage.getItem('phone'); // stored after OTP
+  // ✅ If user already registered, redirect to /home
+  useEffect(() => {
+    const checkUserExists = async () => {
+      if (!uid) return navigate('/');
+
+      const userRef = doc(db, 'persons', uid);
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        navigate('/home');
+      }
+    };
+
+    checkUserExists();
+  }, [navigate, uid]);
 
   const handleRegister = async () => {
     if (!name || !email || !location) {
@@ -18,14 +32,12 @@ const Register = () => {
     }
 
     try {
-     await setDoc(doc(db, 'persons', auth.currentUser.uid), {
-  fullName: name,
-  email: email,
-  location: location,
-  phoneNumber: auth.currentUser.phoneNumber,
-});
-console.log("✅ User saved:", name, email, location);
-
+      await setDoc(doc(db, 'persons', uid), {
+        fullName: name,
+        email: email,
+        location: location,
+        phoneNumber: auth.currentUser.phoneNumber,
+      });
 
       navigate('/home');
     } catch (error) {
