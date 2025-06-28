@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const ItemDetail = () => {
-  // const { id } = useParams(); // item id (optional if needed)
-  useParams(); // Call useParams in case you need to keep the hook for future use
+  useParams(); 
   const [item, setItem] = useState(null);
   const navigate = useNavigate();
 

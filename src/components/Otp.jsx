@@ -51,9 +51,11 @@ const Otp = () => {
       const userSnap = await getDoc(userDocRef);
 
       if (userSnap.exists()) {
-        navigate('/home'); // ✅ Existing user
+        // user exists, redirect to home
+        navigate('/home'); 
       } else {
-        navigate('/register'); // 🆕 New user
+        //  New user redirect to registration
+        navigate('/register'); 
       }
 
     } catch (error) {
